@@ -30,6 +30,9 @@ pub type StackPointer = NonZeroUsize;
 pub const STACK_ALIGNMENT: usize = crate::arch::STACK_ALIGNMENT;
 
 /// Minimum size of a stack, excluding guard pages.
+#[cfg(target_os = "windows")]
+pub const MIN_STACK_SIZE: usize = 1024 * 1024;
+#[cfg(not(target_os = "windows"))]
 pub const MIN_STACK_SIZE: usize = 4096;
 
 /// A trait for objects that hold ownership of a stack.
