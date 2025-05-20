@@ -412,6 +412,14 @@ pub unsafe fn switch_yield(arg: EncodedValue, parent_link: *mut StackPointer) ->
         // switch_and_link().
         "mov rsi, rsp",
 
+        // Write the 2 TEB fields which can change during corountine execution
+        // to the base of the stack. This is later recovered by
+        // update_teb_from_stack().
+        "mov rax, gs:[0x10]", // StackLimit
+        "mov [rdx + 24], rax",
+        "mov rax, gs:[0x1748]", // GuaranteedStackBytes
+        "mov [rdx + 16], rax",
+
         // Load the parent context's stack pointer.
         "mov rsp, [rdx]",
 
